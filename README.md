@@ -65,12 +65,17 @@ The main function of [URLPathMatchingFilter.java](https://github.com/Antabot/Whi
 
 # Vulnerability reproduce
 
-First, we find an interface that requires authentication to access, admin/content/article. This API is used to view the article content.
+First, we find an interface that requires authentication to access, admin/content/article. This API is used to uploud the article content.
 
 Then, we tried to access this endpoint by Postman without authentication information. We can see that due to the lack of authentication information, there is no results returned.
-![Image Description](https://user-images.githubusercontent.com/your-username/your-image.png)
+![Image Description](https://github.com/Dengdeng857/directory-traversal/blob/main/image/99ce0b9feb3e948a34bf857830a3b54.png)
 
+After that, also without authentication information, we try to access the /login/../export interface. We can see that the access is successful.
 
+![Image Description](https://github.com/Dengdeng857/directory-traversal/blob/main/image/b52ee4200728bbdb7e0a0d258d0aef9.png)
+
+# Impact
+Users can use directory traversal to gain unauthorized access to the interface.
 
 
    
