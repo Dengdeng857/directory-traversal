@@ -6,7 +6,7 @@ White-Jotter,a simple CMS developed by Spring Boot and Vue.js with development t
 White-Jotter project
 
 # Vulnerability causes
-The main function of [URLPathMatchingFilter.java](https://github.com/Antabot/White-Jotter/blob/master/wj/src/main/java/com/gm/wj/filter/URLPathMatchingFilter.java) to implement permission control is in the onPreHandle function.
+The main function of https://github.com/Antabot/White-Jotter/blob/master/wj/src/main/java/com/gm/wj/config/ShiroConfiguration.java to implement permission control is in the onPreHandle function.
 
 
       public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
