@@ -41,7 +41,7 @@ First, we find an interface that requires authentication to access, admin/conten
 
 Then, we tried to access this endpoint by Postman without authentication information. We can see that due to the lack of authentication information, there is no results returned.
 ![Image Description](https://github.com/Dengdeng857/directory-traversal/blob/main/image/99ce0b9feb3e948a34bf857830a3b54.png)
-![Image Description](https://github.com/Dengdeng857/directory-traversal/blob/main/image/99ce0b9feb3e948a34bf857830a3b54.png)
+![Image Description](https://github.com/Dengdeng857/directory-traversal/blob/main/image/1.jpg)
 After that, also without authentication information, we try to access the /login/../export interface. We can see that the access is successful.
 
 ![Image Description](https://github.com/Dengdeng857/directory-traversal/blob/main/image/b52ee4200728bbdb7e0a0d258d0aef9.png)
