@@ -9,53 +9,25 @@ White-Jotter project
 The main function of [URLPathMatchingFilter.java](https://github.com/Antabot/White-Jotter/blob/master/wj/src/main/java/com/gm/wj/filter/URLPathMatchingFilter.java) to implement permission control is in the onPreHandle function.
 
 
-    protected boolean onPreHandle(ServletRequest request, ServletResponse response, Object mappedValue) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+      public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        shiroFilterFactoryBean.setSecurityManager(securityManager);
+        shiroFilterFactoryBean.setLoginUrl("/nowhere");
 
-        if (HttpMethod.OPTIONS.toString().equals((httpServletRequest).getMethod())) {
-            httpServletResponse.setStatus(HttpStatus.NO_CONTENT.value());
-            return true;
-        }
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+        Map<String, Filter> customizedFilter = new HashMap<>();  // 自定义过滤器设置 1
 
-        if (null == adminPermissionService) {
-            adminPermissionService = SpringContextUtils.getContext().getBean(AdminPermissionService.class);
-        }
+        customizedFilter.put("url", getURLPathMatchingFilter()); // 自定义过滤器设置 2，命名，需在设置过滤路径前
 
-        String requestAPI = getPathWithinApplication(request);
+        filterChainDefinitionMap.put("/api/authentication", "authc"); // 防鸡贼登录
+        filterChainDefinitionMap.put("/api/menu", "authc");
+        filterChainDefinitionMap.put("/api/admin/**", "authc");
 
-        Subject subject = SecurityUtils.getSubject();
+        filterChainDefinitionMap.put("/api/admin/**", "url");  // 自定义过滤器设置 3，设置过滤路径
 
-        if (!subject.isAuthenticated()) {
-            log.info("未登录用户尝试访问需要登录的接口");
-            return false;
-        }
-
-        // 判断访问接口是否需要过滤（数据库中是否有对应信息）
-        boolean needFilter = adminPermissionService.needFilter(requestAPI);
-        if (!needFilter) {
-            return true;
-        } else {
-            // 判断当前用户是否有相应权限
-            boolean hasPermission = false;
-            String username = subject.getPrincipal().toString();
-            Set<String> permissionAPIs = adminPermissionService.listPermissionURLsByUser(username);
-            for (String api : permissionAPIs) {
-                // 匹配前缀
-                if (requestAPI.startsWith(api)) {
-                    hasPermission = true;
-                    break;
-                }
-            }
-
-            if (hasPermission) {
-                log.trace("用户：" + username + "访问了：" + requestAPI + "接口");
-                return true;
-            } else {
-                log.warn( "用户：" + username + "访问了没有权限的接口：" + requestAPI);
-                return false;
-            }
-        }
+        shiroFilterFactoryBean.setFilters(customizedFilter); // 自定义过滤器设置 4，启用
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        return shiroFilterFactoryBean;
     }
    The function directly obtains the request path through getPathWithinApplication(request), which internally uses the unsafe method getRequestURI. This method does not process directory operations such as ./ and ../. It then uses the startsWith function to match the whitelist and determine whether the request requires permission validation.
    
