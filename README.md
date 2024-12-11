@@ -1,9 +1,9 @@
-# directory-traversal
+# Authentication vulnerability.
 Introduce the incorrect access control vulnerabilities in White-Jotter project.
 
 White-Jotter,a simple CMS developed by Spring Boot and Vue.js with development tutorials
 # version
-White-Jotter project
+White-Jotter project v0.2.2
 
 # Vulnerability causes
 The main function of https://github.com/Antabot/White-Jotter/blob/master/wj/src/main/java/com/gm/wj/config/ShiroConfiguration.java is use to configure the filter matching and authentication rules.
