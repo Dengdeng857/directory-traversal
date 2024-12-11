@@ -29,10 +29,10 @@ The main function of https://github.com/Antabot/White-Jotter/blob/master/wj/src/
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
-   The function directly obtains the request path through getPathWithinApplication(request), which internally uses the unsafe method getRequestURI. This method does not process directory operations such as ./ and ../. It then uses the startsWith function to match the whitelist and determine whether the request requires permission validation.
-   
-   Because it use startsWith to match requests that contain the specified string or start with the specified string. If the match is successful, it returns true and will not perform identity verification.
+  This code configures a Shiro security filter, where a custom filter is set up for specific API paths.It defines the filter's matching rules. However, it only matches certain API paths, meaning other paths will not be processed by the filter for authentication and related operations.
 
+  If you manipulate the path with ./ or ../ (relative path references), it could potentially bypass the filter and directly access the controller layer, as the filter is only applied to specific API paths defined in the configuration.
+  
   We can use directory traversal to bypass identity verification.When we access api/aaa/;/../admin/content/article as a user, we can directly access the api/admin/content/article, which is intended for admin only.
 
 # Vulnerability reproduce
